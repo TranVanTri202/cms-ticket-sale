@@ -155,8 +155,8 @@ const Quanlyve = () => {
         onOk={() => setModal(false)}
         onCancel={() => setModal(false)}
       >
-        <div className="modal-locve">
-        <h3>Lọc vé</h3>
+        <div className="modal-locve" style={{background:"#FFF"}}>
+        <h3 className="text-center ">Lọc vé</h3>
         <p><input type="datetime-local" /></p>
         <p>some contents...</p>
         <p>some contents...</p>

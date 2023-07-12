@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+# Getting Started with Create React App (Máy em không dùng được Yarn, em đã xin dùng npm rồi ạ )
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
