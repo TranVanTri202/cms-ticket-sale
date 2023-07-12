@@ -148,8 +148,6 @@ const Quanlyve = () => {
           )}
         </div>
       </div>
-  
-
     </div>
     <Modal 
         centered
@@ -159,7 +157,7 @@ const Quanlyve = () => {
       >
         <div className="modal-locve">
         <h3>Lọc vé</h3>
-        <p>some contents...</p>
+        <p><input type="datetime-local" /></p>
         <p>some contents...</p>
         <p>some contents...</p>
         </div>
