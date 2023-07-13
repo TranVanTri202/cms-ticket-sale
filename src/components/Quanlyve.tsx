@@ -154,6 +154,7 @@ const Quanlyve = () => {
         open={modal}
         onOk={() => setModal(false)}
         onCancel={() => setModal(false)}
+        style={{width:"634px", height:"454"}}
       >
         <div className="modal-locve" style={{background:"#FFF"}}>
         <h3 className="text-center ">Lọc vé</h3>
