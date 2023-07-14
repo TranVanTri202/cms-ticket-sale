@@ -1,4 +1,4 @@
-import avatar from "../asset/image/avatar.png";
+import avatar from "../../asset/image/avatar.png";
 const Navtop = () => {
   return (
     <div>

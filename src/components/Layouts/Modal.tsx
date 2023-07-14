@@ -1,6 +1,7 @@
 const Modal = () => {
-    return ( <div>
-
+    return ( 
+    <div>
+        
     </div> );
 }
  

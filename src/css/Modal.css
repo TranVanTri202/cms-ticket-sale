@@ -1,0 +1,31 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500&display=swap");
+.custom-datepicker .ant-picker-suffix {
+    color: #FF993C; 
+    font-size: 17px;
+  }
+.custom-datepicker{
+    width: 80%;
+}
+.heading-locve{
+    font-family: "Montserrat", sans-serif;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 30px;
+    color: #1E0D03;
+    display: flex;
+    justify-content: center;
+}
+
+.tungay-denngay{
+    display: flex;
+    gap: 70px;   
+    margin-top: 20px;
+}
+.tungay-denngay span{
+    font-family: "Montserrat", sans-serif;
+    font-style: normal;
+    line-height: 26px;
+    font-weight: 600;
+    opacity: 0.699999988079071;
+}

@@ -1,7 +1,7 @@
 import { useState } from "react";
-import insght from "../asset/image/insightimg.png";
+import insght from "../../asset/image/insightimg.png";
 import { NavLink } from "react-router-dom";
-import "../css/Menu.css";
+import "../../css/Menu.css";
 
 const Menu = () => {
   const [activeItem, setActiveItem] = useState<string>("home");

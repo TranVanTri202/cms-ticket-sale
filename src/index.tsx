@@ -4,6 +4,7 @@ import App from "./App";
 import "./css/index.css";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css"
 import "./css/Content.css"
+import "./css/Modal.css"
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from 'react-router-dom';
 import "bootstrap-icons/font/bootstrap-icons.css";
