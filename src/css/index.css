@@ -71,9 +71,36 @@ body {
   margin-top: 17px;
 }
 
-
-
-
+.themve .btn-xuatfile{
+  background-color: transparent;
+  padding: 11px 16px;
+  justify-content: center;
+  align-items: center;
+  outline: none;
+  border: 1px solid var(--yellow-1, #ff993c);
+  width: auto;
+  float: right;
+  margin-left: 10px;
+  font-family: "Montserrat", sans-serif;
+  border-radius: 6px;
+  color: #ff993c;
+  font-weight: 700;
+}
+.themve .btn-themgoive{
+  background-color: #FF993C;
+  padding: 11px 16px;
+  justify-content: center;
+  align-items: center;
+  outline: none;
+  border: none;
+  width: auto;
+  float: right;
+  margin-left: 10px;
+  font-family: "Montserrat", sans-serif;
+  border-radius: 6px;
+  color: #FFFFFF;
+  font-weight: 700;
+}
 
 
 

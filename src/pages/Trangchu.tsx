@@ -1,3 +1,5 @@
+import LineChart from "../components/Charts/Linechart";
+
 const Trangchu = () => {
     return (
       <>
@@ -5,6 +7,7 @@ const Trangchu = () => {
         <div className="main">
               <h2>Thong ke</h2>
         </div>
+        <LineChart />
       </div>
       
       </>
