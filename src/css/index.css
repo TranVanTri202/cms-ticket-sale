@@ -102,5 +102,51 @@ body {
   font-weight: 700;
 }
 
+.labelDoanhthu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.labelDoanhthu span{
+  font-weight: 700;
+}
+.chart1{
+  margin-bottom: 15px;
+}
+.chart2{
+  height: 230px;
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
 
+}
+.mota button{
+  outline: none;
+  border: none;
+  padding: 10px 20px;
+}
+.mota button:nth-child(1){
+  background-color:rgb(255, 138, 72);
+}
+.mota button{
+  background-color:rgb(54, 162, 235);
+}
+.chartGiadinh , .chartSukien{
+  text-align: center;
+}
+.tinhtrangdoisoat{
+  display: flex;
+  gap: 20px;
+}
+.tinhtrangdoisoat span{
+  font-family: "Montserrat", sans-serif;
+}
+.tinhtrangdoisoat input{
+  width: 17px;
+  height: 17px;
+}
+.tinhtrangdoisoat div{
+  align-items: center;
 
+}

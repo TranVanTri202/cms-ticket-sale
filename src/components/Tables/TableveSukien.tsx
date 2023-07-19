@@ -4,20 +4,21 @@ import apiFirebase from "../../firebase/apiFirebase";
 
 interface FirebaseData {
   id: string;
-  STT: number;
   bookingcode: string;
   congcheck: string;
   ngaysudung: string;
-  ngayxuatve: string;
+  ngayhethan: string;
   sove: string;
   tinhtrang: string;
+  tensukien: string;
 }
 
 interface TableQuanliveProps {
   filter: string;
+  ticketNumber: string;
 }
 
-const TableQuanlive: React.FC<TableQuanliveProps> = ({ filter }) => {
+const TableveSukien: React.FC<TableQuanliveProps> = ({ filter, ticketNumber }) => {
   const [data, setData] = useState<FirebaseData[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 9;
@@ -28,7 +29,7 @@ const TableQuanlive: React.FC<TableQuanliveProps> = ({ filter }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const querySnapshot = await getDocs(collection(apiFirebase, "ticket"));
+      const querySnapshot = await getDocs(collection(apiFirebase, "ticketEvent"));
       const fetchedData: FirebaseData[] = [];
       querySnapshot.forEach((doc) => {
         fetchedData.push({ id: doc.id, ...doc.data() } as FirebaseData);
@@ -45,9 +46,13 @@ const TableQuanlive: React.FC<TableQuanliveProps> = ({ filter }) => {
   let filteredRows: FirebaseData[];
 
   if (filter === "Tất cả") {
-    filteredRows = data;
+    filteredRows = data.filter((item) =>
+      item.sove && item.sove.includes(ticketNumber)
+    );
   } else {
-    filteredRows = data.filter((item) => item.tinhtrang === filter);
+    filteredRows = data.filter(
+      (item) => item.tinhtrang === filter && item.sove && item.sove.includes(ticketNumber)
+    );
   }
 
   const currentRows = filteredRows.slice(indexOfFirstRow, indexOfLastRow);
@@ -67,9 +72,10 @@ const TableQuanlive: React.FC<TableQuanliveProps> = ({ filter }) => {
               <th>STT</th>
               <th>Booking code</th>
               <th>Số vé</th>
+              <th>Tên sự kiện</th>
               <th>Tình trạng sử dụng</th>
               <th>Ngày sử dụng</th>
-              <th>Ngày xuất vé</th>
+              <th>Hạn sử dụng</th>
               <th>Cổng check-in</th>
             </tr>
           </thead>
@@ -103,10 +109,11 @@ const TableQuanlive: React.FC<TableQuanliveProps> = ({ filter }) => {
               }
 
               return (
-                <tr key={item.STT}>
+                <tr key={index}>
                   <td style={tdstyle}>{calculateSTT(index)}</td>
                   <td style={tdstyle}>{item.bookingcode}</td>
                   <td style={tdstyle}>{item.sove}</td>
+                  <td style={tdstyle}>{item.tensukien}</td>
                   <td style={tdstyle}>
                     <span className="hansudung" style={spanStyle}>
                       <i className="bi bi-circle-fill"></i>
@@ -114,7 +121,7 @@ const TableQuanlive: React.FC<TableQuanliveProps> = ({ filter }) => {
                     </span>
                   </td>
                   <td style={tdstyle}>{item.ngaysudung}</td>
-                  <td style={tdstyle}>{item.ngayxuatve}</td>
+                  <td style={tdstyle}>{item.ngayhethan}</td>
                   <td style={tdstyle}>{item.congcheck}</td>
                 </tr>
               );
@@ -137,4 +144,4 @@ const TableQuanlive: React.FC<TableQuanliveProps> = ({ filter }) => {
   );
 };
 
-export default TableQuanlive;
+export default TableveSukien;

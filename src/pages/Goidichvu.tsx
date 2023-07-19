@@ -1,21 +1,34 @@
 import { useState } from "react";
 import ModalGoidichvu from "../components/Modals/ModalThemGoidichvu";
 import TableGoive from "../components/Tables/TableGoive";
+import Modaledit from "../components/Modals/Modaledit";
 
 const Goidichvu = () => {
-  const [modalvisible, setModalVisible] = useState<boolean>(false)
-  const openModal = () =>{
-    setModalVisible(true)
-  }
+  const [modalvisible, setModalVisible] = useState<boolean>(false);
+  const [modalEditVisible, setModalEditVisible] = useState<boolean>(false);
+
+  const closeModaledit = () => {
+    setModalEditVisible(false);
+  };
+
+  const openModalEdit = () => {
+    setModalEditVisible(true);
+  };
+
+  const openModal = () => {
+    setModalVisible(true);
+  };
+
   const closeModal = () => {
     setModalVisible(false);
   };
-    return (
-      <>
+
+  return (
+    <>
       <div className="content">
         <div className="main">
-              <h2>Danh sách gói vé</h2>
-              <div className="congcutimve">
+          <h2>Danh sách gói vé</h2>
+          <div className="congcutimve">
             <div className="timve">
               <input
                 type="text"
@@ -25,19 +38,26 @@ const Goidichvu = () => {
               <i className="bi bi-search"></i>
             </div>
             <div className="themve">
-              <button type="button" className="btn-themgoive"  onClick={openModal}>
+              <button
+                type="button"
+                className="btn-themgoive"
+                onClick={openModal}
+              >
                 Thêm gói vé
               </button>
               <button className="btn-xuatfile">Xuất file (.csv)</button>
             </div>
           </div>
-        <TableGoive />
+          <TableGoive openModalEdit={openModalEdit} />
         </div>
       </div>
       <ModalGoidichvu visible={modalvisible} onClose={closeModal} />
-      </>
-    );
-  };
-  
-  export default Goidichvu;
-  
+      <Modaledit
+        visibleedit={modalEditVisible}
+        onClose={closeModaledit}
+      />
+    </>
+  );
+};
+
+export default Goidichvu;

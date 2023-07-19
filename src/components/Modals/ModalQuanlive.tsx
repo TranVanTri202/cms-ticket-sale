@@ -92,7 +92,7 @@ const ModalQuanlive: React.FC<ModalQuanliveProps> = ({
           <span className="tinhtrangsudung">Cổng Check-in</span>
           <div className="port-list">
             <div className="port-item">
-              <input type="checkbox" id="port6" />
+              <input  type="checkbox" id="port6" />
               <label htmlFor="port6">Tất cả</label>
             </div>
             <div className="port-item">
