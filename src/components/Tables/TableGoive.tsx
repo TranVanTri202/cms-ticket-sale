@@ -19,6 +19,9 @@ interface tableProps {
   openModalEdit: () => void;
 }
 const TableGoive: React.FC<tableProps> = ({ openModalEdit }) => {
+  const formatNumberWithDots = (value: number)  => {
+    return value.toLocaleString("vi-VN")
+  };
   const [data, setData] = useState<packageData[]>([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -53,6 +56,9 @@ const TableGoive: React.FC<tableProps> = ({ openModalEdit }) => {
         </thead>
         <tbody>
           {data.map((item, index) => {
+            let magoi1 = item.ngayapdung.split("/")
+           let maGoi2 ="ALT" +  magoi1.join("")
+            
             let spanStyle = {};
             if (item.tinhtrang === "Tắt") {
               spanStyle = {
@@ -83,14 +89,14 @@ const TableGoive: React.FC<tableProps> = ({ openModalEdit }) => {
             return (
               <tr key={index}>
                 <td style={tdstyle}>{index + 1}</td>
-                <td style={tdstyle}>{item.magoi}</td>
+                <td style={tdstyle}>{maGoi2}</td>
                 <td style={tdstyle}>{item.tengoi}</td>
                 <td style={tdstyle}>
                   {item.ngayapdung} <br /> {item.thoigianapdung}
                 </td>
-                <td style={tdstyle}>{item.ngayhethan}</td>
-                <td style={tdstyle}>{item.giavele} VNĐ</td>
-                <td style={tdstyle}>{item.giavecombo}VNĐ/{item.sogoi}vé </td>
+                <td style={tdstyle}>{item.ngayhethan} <br /> {item.thoigianhethan}</td>
+                <td style={tdstyle}>{formatNumberWithDots(item.giavele)} VNĐ</td>
+                <td style={tdstyle}>{formatNumberWithDots(item.giavecombo)}VNĐ/{item.sogoi}vé </td>
                 <td style={tdstyle}>
                   <span className="hansudung" style={spanStyle}>
                     <i className="bi bi-circle-fill"></i>

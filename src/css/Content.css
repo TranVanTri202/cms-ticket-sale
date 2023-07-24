@@ -121,3 +121,28 @@
   font-weight: 700;
   border-radius: 8px;
 }
+.pagination .active{
+  background-color: transparent;
+  border: 1px solid #FF993C;
+  color:#FF993C ;
+}
+.pagination button{
+  border: none;
+  color: black;
+}
+
+.table-sukien td{
+  font-size: 15px;
+}
+.table-sukien th{
+  font-size: 15px;
+}
+
+.bi-three-dots-vertical{
+  visibility: hidden;
+  cursor: pointer;
+}
+
+.hov:hover .bi-three-dots-vertical{
+  visibility: visible;
+}

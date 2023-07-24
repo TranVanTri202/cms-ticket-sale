@@ -1,11 +1,14 @@
 import Modal from "antd/lib/modal/Modal";
 import { CalendarDate, CalendarTime } from "../Calendar/Calendar";
+import { useState } from "react";
 
 interface ModalGoidichvuProps {
   visibleedit: boolean;
   onClose: () => void;
 }
 const Modaledit: React.FC<ModalGoidichvuProps> = ({ visibleedit, onClose }) => {
+  const [thoigianapdung, setThoigianApdung] = useState<string | null>(null)
+  const [thoigianhethan, setThoigianHethan] = useState<string | null>(null)
   return (
     <>
       <Modal
@@ -46,15 +49,15 @@ const Modaledit: React.FC<ModalGoidichvuProps> = ({ visibleedit, onClose }) => {
             <div className="ngayapdung">
               <span>Ngày áp dụng</span>
               <div className="input-dateandtime" style={{ display: "flex" }}>
-                <CalendarDate />
-                <CalendarTime />
+                <CalendarDate  />
+                <CalendarTime onTimechane={setThoigianApdung}/>
               </div>
             </div>
             <div className="ngayhethan">
               <span>Ngày hết hạn</span>
               <div className="input-dateandtime" style={{ display: "flex" }}>
                 <CalendarDate />
-                <CalendarTime />
+                <CalendarTime onTimechane={setThoigianHethan} />
               </div>
             </div>
           </div>

@@ -14,16 +14,18 @@ interface FirebaseData {
 }
 
 interface TableQuanliveProps {
-  filter: string;
+  filter: string[];
   ticketNumber: string;
+  selectedPorts: string[]; // Thêm trạng thái cho các cổng đã chọn
 }
 
 const Tablevegiadinh: React.FC<TableQuanliveProps> = ({
   filter,
   ticketNumber,
+  selectedPorts,
 }) => {
   const [data, setData] = useState<FirebaseData[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const rowsPerPage = 9;
 
   const handlePageChange = (pageNumber: number) => {
@@ -48,15 +50,37 @@ const Tablevegiadinh: React.FC<TableQuanliveProps> = ({
 
   let filteredRows: FirebaseData[];
 
-  if (filter === "Tất cả") {
-    filteredRows = data.filter((item) =>
-      item.sove && item.sove.includes(ticketNumber)
+  if (filter.includes("Tất cả") && selectedPorts.length === 1 && selectedPorts[0] === "Tất cả") {
+    // Nếu filter và selectedPorts đều là ["Tất cả"], hiển thị toàn bộ dữ liệu
+    filteredRows = data.filter((item) => item.sove && item.sove.includes(ticketNumber));
+  } else if (filter.includes("Tất cả")) {
+    // Nếu filter là "Tất cả" và selectedPorts không là "Tất cả", chỉ lọc theo selectedPorts
+    filteredRows = data.filter(
+      (item) =>
+        item.sove &&
+        item.sove.includes(ticketNumber) &&
+        (selectedPorts.length === 0 || selectedPorts.includes(item.congcheck))
+    );
+  } else if (selectedPorts.includes("Tất cả")) {
+    // Nếu filter không là "Tất cả" và selectedPorts là "Tất cả", chỉ lọc theo filter
+    filteredRows = data.filter(
+      (item) =>
+        filter.includes(item.tinhtrang) &&
+        item.sove &&
+        item.sove.includes(ticketNumber)
     );
   } else {
+    // Nếu filter không là "Tất cả" và selectedPorts không là "Tất cả", lọc theo cả filter và selectedPorts
     filteredRows = data.filter(
-      (item) => item.tinhtrang === filter && item.sove && item.sove.includes(ticketNumber)
+      (item) =>
+        filter.includes(item.tinhtrang) &&
+        item.sove &&
+        item.sove.includes(ticketNumber) &&
+        (selectedPorts.length === 0 || selectedPorts.includes(item.congcheck))
     );
   }
+    
+  
 
   const currentRows = filteredRows.slice(indexOfFirstRow, indexOfLastRow);
 
@@ -79,6 +103,7 @@ const Tablevegiadinh: React.FC<TableQuanliveProps> = ({
               <th>Ngày sử dụng</th>
               <th>Ngày xuất vé</th>
               <th>Cổng check-in</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -111,7 +136,7 @@ const Tablevegiadinh: React.FC<TableQuanliveProps> = ({
               }
 
               return (
-                <tr key={index}>
+                <tr className="hov" key={index}>
                   <td style={tdstyle}>{calculateSTT(index)}</td>
                   <td style={tdstyle}>{item.bookingcode}</td>
                   <td style={tdstyle}>{item.sove}</td>
@@ -123,7 +148,10 @@ const Tablevegiadinh: React.FC<TableQuanliveProps> = ({
                   </td>
                   <td style={tdstyle}>{item.ngaysudung}</td>
                   <td style={tdstyle}>{item.ngayxuatve}</td>
-                  <td style={tdstyle}>{item.congcheck}</td>
+                  <td style={tdstyle}>{item.congcheck} </td>
+                  <td style={tdstyle}>
+                    <i className="bi bi-three-dots-vertical"></i>
+                  </td>
                 </tr>
               );
             })}

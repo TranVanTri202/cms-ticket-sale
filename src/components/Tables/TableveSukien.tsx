@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import apiFirebase from "../../firebase/apiFirebase";
+import ModalDoingaysudung from "../Modals/ModalDoingaysudung";
 
 interface FirebaseData {
   id: string;
@@ -14,11 +15,29 @@ interface FirebaseData {
 }
 
 interface TableQuanliveProps {
-  filter: string;
+  filter: string[];
   ticketNumber: string;
+  selectedPorts:string[],
 }
 
-const TableveSukien: React.FC<TableQuanliveProps> = ({ filter, ticketNumber }) => {
+const TableveSukien: React.FC<TableQuanliveProps> = ({
+  filter,
+  ticketNumber,
+  selectedPorts
+}) => {
+  const [modalNgaysudung, setModalNgaysudung] = useState(false);
+  const [valueNgayhethan, setValuengayhethan] = useState<string | null>(null);
+
+  const openModalDoingaysudung = (value: string) => {
+    setModalNgaysudung(true);
+    setValuengayhethan(value || null);
+  };
+
+  const closeModal = () => {
+    setModalNgaysudung(false);
+    setValuengayhethan(null);
+  };
+
   const [data, setData] = useState<FirebaseData[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 9;
@@ -29,7 +48,9 @@ const TableveSukien: React.FC<TableQuanliveProps> = ({ filter, ticketNumber }) =
 
   useEffect(() => {
     const fetchData = async () => {
-      const querySnapshot = await getDocs(collection(apiFirebase, "ticketEvent"));
+      const querySnapshot = await getDocs(
+        collection(apiFirebase, "ticketEvent")
+      );
       const fetchedData: FirebaseData[] = [];
       querySnapshot.forEach((doc) => {
         fetchedData.push({ id: doc.id, ...doc.data() } as FirebaseData);
@@ -45,13 +66,33 @@ const TableveSukien: React.FC<TableQuanliveProps> = ({ filter, ticketNumber }) =
 
   let filteredRows: FirebaseData[];
 
-  if (filter === "Tất cả") {
-    filteredRows = data.filter((item) =>
-      item.sove && item.sove.includes(ticketNumber)
+  if (filter.includes("Tất cả") && selectedPorts.length === 1 && selectedPorts[0] === "Tất cả") {
+    // Nếu filter và selectedPorts đều là ["Tất cả"], hiển thị toàn bộ dữ liệu
+    filteredRows = data.filter((item) => item.sove && item.sove.includes(ticketNumber));
+  } else if (filter.includes("Tất cả")) {
+    // Nếu filter là "Tất cả" và selectedPorts không là "Tất cả", chỉ lọc theo selectedPorts
+    filteredRows = data.filter(
+      (item) =>
+        item.sove &&
+        item.sove.includes(ticketNumber) &&
+        (selectedPorts.length === 0 || selectedPorts.includes(item.congcheck))
+    );
+  } else if (selectedPorts.includes("Tất cả")) {
+    // Nếu filter không là "Tất cả" và selectedPorts là "Tất cả", chỉ lọc theo filter
+    filteredRows = data.filter(
+      (item) =>
+        filter.includes(item.tinhtrang) &&
+        item.sove &&
+        item.sove.includes(ticketNumber)
     );
   } else {
+    // Nếu filter không là "Tất cả" và selectedPorts không là "Tất cả", lọc theo cả filter và selectedPorts
     filteredRows = data.filter(
-      (item) => item.tinhtrang === filter && item.sove && item.sove.includes(ticketNumber)
+      (item) =>
+        filter.includes(item.tinhtrang) &&
+        item.sove &&
+        item.sove.includes(ticketNumber) &&
+        (selectedPorts.length === 0 || selectedPorts.includes(item.congcheck))
     );
   }
 
@@ -77,6 +118,7 @@ const TableveSukien: React.FC<TableQuanliveProps> = ({ filter, ticketNumber }) =
               <th>Ngày sử dụng</th>
               <th>Hạn sử dụng</th>
               <th>Cổng check-in</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -109,7 +151,7 @@ const TableveSukien: React.FC<TableQuanliveProps> = ({ filter, ticketNumber }) =
               }
 
               return (
-                <tr key={index}>
+                <tr className="hov" key={index}>
                   <td style={tdstyle}>{calculateSTT(index)}</td>
                   <td style={tdstyle}>{item.bookingcode}</td>
                   <td style={tdstyle}>{item.sove}</td>
@@ -123,6 +165,12 @@ const TableveSukien: React.FC<TableQuanliveProps> = ({ filter, ticketNumber }) =
                   <td style={tdstyle}>{item.ngaysudung}</td>
                   <td style={tdstyle}>{item.ngayhethan}</td>
                   <td style={tdstyle}>{item.congcheck}</td>
+                  <td style={tdstyle}>
+                    <i
+                      onClick={() => openModalDoingaysudung(item.ngayhethan)}
+                      className="bi bi-three-dots-vertical"
+                    ></i>
+                  </td>
                 </tr>
               );
             })}
@@ -130,16 +178,25 @@ const TableveSukien: React.FC<TableQuanliveProps> = ({ filter, ticketNumber }) =
         </table>
       </div>
       <div className="pagination justify-content-center">
-        {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
-          <button
-            key={pageNumber}
-            className={`page-link btn btn-danger ${pageNumber === currentPage ? "active" : ""}`}
-            onClick={() => handlePageChange(pageNumber)}
-          >
-            {pageNumber}
-          </button>
-        ))}
+        {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+          (pageNumber) => (
+            <button
+              key={pageNumber}
+              className={`page-link btn btn-danger ${
+                pageNumber === currentPage ? "active" : ""
+              }`}
+              onClick={() => handlePageChange(pageNumber)}
+            >
+              {pageNumber}
+            </button>
+          )
+        )}
       </div>
+      <ModalDoingaysudung
+        valueNgayhethan={valueNgayhethan}
+        onclose={closeModal}
+        visible={modalNgaysudung}
+      />
     </>
   );
 };

@@ -212,3 +212,18 @@
   outline: none;
   color: #FFFFFF;
 }
+
+/* .modal-doingay h5{
+ display: grid;
+ place-items: center;
+} */
+.title-modal{
+  display: flex;
+  justify-content: center;
+}
+.title-modal h5{
+  font-weight: 700;
+}
+.col-md-4 span{
+  font-weight: 600;
+}
