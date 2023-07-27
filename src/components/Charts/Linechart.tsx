@@ -27,11 +27,11 @@ interface ChartData {
 const dataList: DataMonth[] = [
   { day: "Thứ 2", amount: "130.0" },
   { day: "Thứ 3", amount: "186.0" },
-  { day: "Thứ 4", amount: "140.0" },
+  { day: "Thứ 4", amount: "330.0" },
   { day: "Thứ 5", amount: "248.0" },
   { day: "Thứ 6", amount: "210.0" },
   { day: "Thứ 7", amount: "260.0" },
-  { day: "CN", amount: "200.0" },
+  { day: "CN",    amount: "290.0" },
 ];
 
 function LineChartComponent() {

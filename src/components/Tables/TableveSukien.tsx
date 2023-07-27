@@ -27,39 +27,42 @@ const TableveSukien: React.FC<TableQuanliveProps> = ({
 }) => {
   const [modalNgaysudung, setModalNgaysudung] = useState(false);
   const [valueNgayhethan, setValuengayhethan] = useState<string | null>(null);
-
-  const openModalDoingaysudung = (value: string) => {
+  const [idhethan, setIdngayhethan]  = useState<string>("")
+  const[sove, setSove] = useState<string>("")
+  const openModalDoingaysudung = (value: string, id:string, sove:string) => {
     setModalNgaysudung(true);
     setValuengayhethan(value || null);
+    setIdngayhethan(id)
+    setSove(sove)
   };
+  
+  
+    const [data, setData] = useState<FirebaseData[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const rowsPerPage = 9;
+  
+    const handlePageChange = (pageNumber: number) => {
+      setCurrentPage(pageNumber);
+    };
 
-  const closeModal = () => {
-    setModalNgaysudung(false);
-    setValuengayhethan(null);
-  };
-
-  const [data, setData] = useState<FirebaseData[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 9;
-
-  const handlePageChange = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
-  };
-
-  useEffect(() => {
     const fetchData = async () => {
-      const querySnapshot = await getDocs(
-        collection(apiFirebase, "ticketEvent")
-      );
+      const querySnapshot = await getDocs(collection(apiFirebase, "ticketEvent"));
       const fetchedData: FirebaseData[] = [];
       querySnapshot.forEach((doc) => {
         fetchedData.push({ id: doc.id, ...doc.data() } as FirebaseData);
       });
       setData(fetchedData);
     };
-
-    fetchData();
-  }, []);
+  
+    useEffect(() => {
+      fetchData();
+    }, [modalNgaysudung]);
+  
+    const closeModal =() => {
+      setModalNgaysudung(false);
+      setValuengayhethan(null);
+  
+    };
 
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
@@ -167,7 +170,7 @@ const TableveSukien: React.FC<TableQuanliveProps> = ({
                   <td style={tdstyle}>{item.congcheck}</td>
                   <td style={tdstyle}>
                     <i
-                      onClick={() => openModalDoingaysudung(item.ngayhethan)}
+                      onClick={() => openModalDoingaysudung(item.ngayhethan, item.id, item.sove)}
                       className="bi bi-three-dots-vertical"
                     ></i>
                   </td>
@@ -196,6 +199,8 @@ const TableveSukien: React.FC<TableQuanliveProps> = ({
         valueNgayhethan={valueNgayhethan}
         onclose={closeModal}
         visible={modalNgaysudung}
+        idngayhethan={idhethan}
+        inSove={sove}
       />
     </>
   );

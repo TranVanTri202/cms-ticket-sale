@@ -1,19 +1,10 @@
 import { useState } from "react";
 import ModalGoidichvu from "../components/Modals/ModalThemGoidichvu";
 import TableGoive from "../components/Tables/TableGoive";
-import Modaledit from "../components/Modals/Modaledit";
 
 const Goidichvu = () => {
   const [modalvisible, setModalVisible] = useState<boolean>(false);
-  const [modalEditVisible, setModalEditVisible] = useState<boolean>(false);
-
-  const closeModaledit = () => {
-    setModalEditVisible(false);
-  };
-
-  const openModalEdit = () => {
-    setModalEditVisible(true);
-  };
+ 
 
   const openModal = () => {
     setModalVisible(true);
@@ -48,14 +39,11 @@ const Goidichvu = () => {
               <button className="btn-xuatfile">Xuất file (.csv)</button>
             </div>
           </div>
-          <TableGoive openModalEdit={openModalEdit} />
+          <TableGoive modalVi={modalvisible}  />
         </div>
       </div>
-      <ModalGoidichvu visible={modalvisible} onClose={closeModal} />
-      <Modaledit
-        visibleedit={modalEditVisible}
-        onClose={closeModaledit}
-      />
+      <ModalGoidichvu  visible={modalvisible} onClose={closeModal} />
+    
     </>
   );
 };

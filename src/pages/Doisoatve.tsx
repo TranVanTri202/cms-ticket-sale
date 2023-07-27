@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { CalendarDate, CalendarDateValue } from "../components/Calendar/Calendar";
+
 import DoisoatGiadinh from "../components/Tables/TableDoisoatGiadinh";
 import DoisoatVesukien from "../components/Tables/TableDoisoatSukien";
+import { CalendarDateValue } from "../components/Calendar/CalenderAddticket";
 
 
 const Doisatve = () => {
   const [beginDate, setBeginDate] = useState<string>(" ")
-  const [endDate, setEndDate] = useState<string>(" ")
+  const [endDate, setEndDate] = useState<string | null>(null)
   const [ticketNumberr, setTicketNumber] = useState<string>("");
   const [selectedTab, setSelectedTab] = useState<string>("giaDinh");
   const [selectOption, setSelectOption] = useState<boolean>(false)
@@ -70,6 +71,8 @@ const Doisatve = () => {
               <DoisoatGiadinh
                 onfillter={onfillter}
                 ticketNumber={ticketNumberr}
+                tungay={beginDate}
+                denngay={endDate}
               />
             ) : (
               <DoisoatVesukien

@@ -150,3 +150,34 @@ body {
   align-items: center;
 
 }
+
+.fill{
+  background-color: #F7F8FB !important;
+  padding: 10px;
+}
+.nofill{
+  padding: 10px;
+}
+
+.dasudung{
+  border: 1px solid #919DBA;
+  background-color: #EAF1F8;
+  color: #919DBA;
+  padding: 4px 6px;
+  border-radius: 4px;
+}
+
+.tat{
+  border: 1px solid #FD5959;
+  background-color: #F8EBE8;
+  color:  #FD5959;
+  padding: 4px 6px;
+  border-radius: 4px;
+}
+.dangapdung{
+  border: 1px solid #03AC00;
+  background-color: #DEF7E0;
+  color: #03AC00;
+  padding: 4px 6px;
+  border-radius: 4px;
+}

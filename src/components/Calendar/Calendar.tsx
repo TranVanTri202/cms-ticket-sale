@@ -6,63 +6,17 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
 const dateFormatList = ["DD/MM/YYYY"];
 
-interface CalendarDateProps {
-  onDateChange: (date: string) => void; // Thêm prop onDateChange và định nghĩa kiểu của nó
-}
-interface CalenderTimeProps {
-  onTimechane: (date: string) => void;
+
+
+interface CalendarValue {
+  dateValue: dayjs.Dayjs | null;
+  onDateChange: (date: any) => void;
 }
 
-export const CalendarDateValue: React.FC<CalendarDateProps> = ({
-  onDateChange,
-}) => {
+export const CalendarDatevl: React.FC<CalendarValue> = ({ dateValue, onDateChange }) => {
   const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs | null>(null);
 
-  const handleDateChange = (date: any) => {
-    setSelectedDate(date);
-    onDateChange(date ? date.format("DD/MM/YYYY") : null);
-  };
-
-  return (
-    <Space direction="vertical" size={12} style={{ margin: "0" }}>
-      <DatePicker
-        value={selectedDate}
-        onChange={handleDateChange}
-        format={dateFormatList}
-        className="custom-datepicker"
-      />
-    </Space>
-  );
-};
-
-export const CalendarTime: React.FC<CalenderTimeProps> = ({ onTimechane }) => {
-  const handleTimeChange = (time: any, timeString: string) => {
-    console.log("HH:mm:ss", timeString);
-    onTimechane(timeString);
-  };
-  return (
-    <Space style={{ margin: "0" }}>
-      <TimePicker
-        className="custom-timepicker"
-        placeholder="HH:mm:ss"
-        onChange={handleTimeChange}
-        format="HH:mm:ss"
-      />
-    </Space>
-  );
-};
-
-interface CalenderValue {
-  dateValue: dayjs.Dayjs | null;
-  onDateChange: (date: string) => void;
-}
-
-export const CalendarDatevl: React.FC<CalenderValue> = ({
-  dateValue,
-  onDateChange,
-}) => {
-  const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs | null>(dateValue);
-
+  // Đặt giá trị ban đầu cho selectedDate khi component mount hoặc khi dateValue prop thay đổi
   useEffect(() => {
     setSelectedDate(dateValue);
   }, [dateValue]);
@@ -70,7 +24,6 @@ export const CalendarDatevl: React.FC<CalenderValue> = ({
   const handleDateChange = (date: any) => {
     setSelectedDate(date);
     onDateChange(date);
-   
   };
 
   return (
@@ -84,6 +37,9 @@ export const CalendarDatevl: React.FC<CalenderValue> = ({
     </Space>
   );
 };
+
+
+
 
 //Lich không lấy dữ liệu
 export const CalendarDate: React.FC = () => {
