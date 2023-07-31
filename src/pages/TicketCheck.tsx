@@ -5,8 +5,8 @@ import DoisoatVesukien from "../components/Tables/TableDoisoatSukien";
 import { CalendarDateValue } from "../components/Calendar/CalenderAddticket";
 
 
-const Doisatve = () => {
-  const [beginDate, setBeginDate] = useState<string>(" ")
+const TicketCheck = () => {
+  const [beginDate, setBeginDate] = useState<string | null>(" ")
   const [endDate, setEndDate] = useState<string | null>(null)
   const [ticketNumberr, setTicketNumber] = useState<string>("");
   const [selectedTab, setSelectedTab] = useState<string>("giaDinh");
@@ -175,4 +175,4 @@ const Doisatve = () => {
   );
 };
 
-export default Doisatve;
+export default TicketCheck;

@@ -2,78 +2,94 @@ import React, { useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import apiFirebase from "../../firebase/apiFirebase";
 import ModalDoingaysudung from "../Modals/ModalDoingaysudung";
+import { Pagination } from "antd";
 
 interface FirebaseData {
   id: string;
+  STT: number;
   bookingcode: string;
   congcheck: string;
   ngaysudung: string;
-  ngayhethan: string;
+  ngayxuatve: string;
   sove: string;
   tinhtrang: string;
-  tensukien: string;
 }
 
-interface TableQuanliveProps {
+interface TableTicketProps {
   filter: string[];
   ticketNumber: string;
-  selectedPorts:string[],
+  selectedPorts: string[];
+  enddate:string | null;
+  BeginDate:string | null
 }
 
-const TableveSukien: React.FC<TableQuanliveProps> = ({
+const TableTicketFamily: React.FC<TableTicketProps> = ({
   filter,
   ticketNumber,
-  selectedPorts
+  selectedPorts,
+  BeginDate,
+  enddate,
 }) => {
-  const [modalNgaysudung, setModalNgaysudung] = useState(false);
+  const [data, setData] = useState<FirebaseData[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const rowsPerPage = 9;
+  const [modalNgaysudung, setModalNgaysudung] = useState<boolean>(false);
   const [valueNgayhethan, setValuengayhethan] = useState<string | null>(null);
-  const [idhethan, setIdngayhethan]  = useState<string>("")
-  const[sove, setSove] = useState<string>("")
-  const openModalDoingaysudung = (value: string, id:string, sove:string) => {
+  const [idhethan, setIdngayhethan] = useState<string>("");
+  const [soVe, setsove] = useState<string>("");
+  const [str, setStr] = useState<string | null>("");
+
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const openModalDoingaysudung = (
+    value: string,
+    id: string,
+    sove: string,
+    str: string
+  ) => {
     setModalNgaysudung(true);
     setValuengayhethan(value || null);
-    setIdngayhethan(id)
-    setSove(sove)
+    setIdngayhethan(id);
+    setsove(sove);
+    setStr(str);
   };
-  
-  
-    const [data, setData] = useState<FirebaseData[]>([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const rowsPerPage = 9;
-  
-    const handlePageChange = (pageNumber: number) => {
-      setCurrentPage(pageNumber);
-    };
 
-    const fetchData = async () => {
-      const querySnapshot = await getDocs(collection(apiFirebase, "ticketEvent"));
-      const fetchedData: FirebaseData[] = [];
-      querySnapshot.forEach((doc) => {
-        fetchedData.push({ id: doc.id, ...doc.data() } as FirebaseData);
-      });
-      setData(fetchedData);
-    };
-  
-    useEffect(() => {
-      fetchData();
-    }, [modalNgaysudung]);
-  
-    const closeModal =() => {
-      setModalNgaysudung(false);
-      setValuengayhethan(null);
-  
-    };
+  const fetchData = async () => {
+    const querySnapshot = await getDocs(collection(apiFirebase, "ticket"));
+    const fetchedData: FirebaseData[] = [];
+    querySnapshot.forEach((doc) => {
+      fetchedData.push({ id: doc.id, ...doc.data() } as FirebaseData);
+    });
+    setData(fetchedData);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [modalNgaysudung]);
+
+  const closeModal = async () => {
+    setModalNgaysudung(false);
+    setValuengayhethan(null);
+    await fetchData();
+  };
 
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
 
   let filteredRows: FirebaseData[];
 
-  if (filter.includes("Tất cả") && selectedPorts.length === 1 && selectedPorts[0] === "Tất cả") {
-    // Nếu filter và selectedPorts đều là ["Tất cả"], hiển thị toàn bộ dữ liệu
-    filteredRows = data.filter((item) => item.sove && item.sove.includes(ticketNumber));
+  
+  if (
+    filter.includes("Tất cả") &&
+    selectedPorts.length === 1 &&
+    selectedPorts[0] === "Tất cả"
+  ) {
+    filteredRows = data.filter(
+      (item) => item.sove && item.sove.includes(ticketNumber)
+    );
   } else if (filter.includes("Tất cả")) {
-    // Nếu filter là "Tất cả" và selectedPorts không là "Tất cả", chỉ lọc theo selectedPorts
     filteredRows = data.filter(
       (item) =>
         item.sove &&
@@ -81,7 +97,6 @@ const TableveSukien: React.FC<TableQuanliveProps> = ({
         (selectedPorts.length === 0 || selectedPorts.includes(item.congcheck))
     );
   } else if (selectedPorts.includes("Tất cả")) {
-    // Nếu filter không là "Tất cả" và selectedPorts là "Tất cả", chỉ lọc theo filter
     filteredRows = data.filter(
       (item) =>
         filter.includes(item.tinhtrang) &&
@@ -89,7 +104,6 @@ const TableveSukien: React.FC<TableQuanliveProps> = ({
         item.sove.includes(ticketNumber)
     );
   } else {
-    // Nếu filter không là "Tất cả" và selectedPorts không là "Tất cả", lọc theo cả filter và selectedPorts
     filteredRows = data.filter(
       (item) =>
         filter.includes(item.tinhtrang) &&
@@ -98,17 +112,16 @@ const TableveSukien: React.FC<TableQuanliveProps> = ({
         (selectedPorts.length === 0 || selectedPorts.includes(item.congcheck))
     );
   }
-
   const currentRows = filteredRows.slice(indexOfFirstRow, indexOfLastRow);
 
   const calculateSTT = (index: number) => {
     return indexOfFirstRow + index + 1;
   };
 
-  const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
+  // const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
 
   return (
-    <>
+    <React.Fragment>
       <div className="tableshow">
         <table className="table tablequanlive">
           <thead>
@@ -116,10 +129,9 @@ const TableveSukien: React.FC<TableQuanliveProps> = ({
               <th>STT</th>
               <th>Booking code</th>
               <th>Số vé</th>
-              <th>Tên sự kiện</th>
               <th>Tình trạng sử dụng</th>
               <th>Ngày sử dụng</th>
-              <th>Hạn sử dụng</th>
+              <th>Ngày xuất vé</th>
               <th>Cổng check-in</th>
               <th></th>
             </tr>
@@ -146,31 +158,37 @@ const TableveSukien: React.FC<TableQuanliveProps> = ({
                   color: "#03AC00",
                 };
               }
-              let tdstyle = {};
+              let tdClass = "";
               if (index % 2 === 1) {
-                tdstyle = { backgroundColor: "#F7F8FB", padding: "10px" };
+                tdClass = "fill";
               } else {
-                tdstyle = { padding: "10px" };
+                tdClass = "nofill";
               }
-
+              let str = "family";
               return (
                 <tr className="hov" key={index}>
-                  <td style={tdstyle}>{calculateSTT(index)}</td>
-                  <td style={tdstyle}>{item.bookingcode}</td>
-                  <td style={tdstyle}>{item.sove}</td>
-                  <td style={tdstyle}>{item.tensukien}</td>
-                  <td style={tdstyle}>
+                  <td className={tdClass}>{calculateSTT(index)}</td>
+                  <td className={tdClass}>{item.bookingcode}</td>
+                  <td className={tdClass}>{item.sove}</td>
+                  <td className={tdClass}>
                     <span className="hansudung" style={spanStyle}>
                       <i className="bi bi-circle-fill"></i>
                       <span>{item.tinhtrang}</span>
                     </span>
                   </td>
-                  <td style={tdstyle}>{item.ngaysudung}</td>
-                  <td style={tdstyle}>{item.ngayhethan}</td>
-                  <td style={tdstyle}>{item.congcheck}</td>
-                  <td style={tdstyle}>
+                  <td className={tdClass}>{item.ngaysudung}</td>
+                  <td className={tdClass}>{item.ngayxuatve}</td>
+                  <td className={tdClass}>{item.congcheck} </td>
+                  <td className={tdClass}>
                     <i
-                      onClick={() => openModalDoingaysudung(item.ngayhethan, item.id, item.sove)}
+                      onClick={() =>
+                        openModalDoingaysudung(
+                          item.ngaysudung,
+                          item.id,
+                          item.sove,
+                          str
+                        )
+                      }
                       className="bi bi-three-dots-vertical"
                     ></i>
                   </td>
@@ -181,29 +199,24 @@ const TableveSukien: React.FC<TableQuanliveProps> = ({
         </table>
       </div>
       <div className="pagination justify-content-center">
-        {Array.from({ length: totalPages }, (_, index) => index + 1).map(
-          (pageNumber) => (
-            <button
-              key={pageNumber}
-              className={`page-link btn btn-danger ${
-                pageNumber === currentPage ? "active" : ""
-              }`}
-              onClick={() => handlePageChange(pageNumber)}
-            >
-              {pageNumber}
-            </button>
-          )
-        )}
+        <Pagination
+          current={currentPage}
+          pageSize={rowsPerPage}
+          total={filteredRows.length}
+          onChange={handlePageChange}
+          showSizeChanger={false}
+        />
       </div>
       <ModalDoingaysudung
-        valueNgayhethan={valueNgayhethan}
         onclose={closeModal}
-        visible={modalNgaysudung}
         idngayhethan={idhethan}
-        inSove={sove}
+        visible={modalNgaysudung}
+        valueNgayhethan={valueNgayhethan}
+        inSove={soVe}
+        defaulModal={str}
       />
-    </>
+    </React.Fragment>
   );
 };
 
-export default TableveSukien;
+export default TableTicketFamily;

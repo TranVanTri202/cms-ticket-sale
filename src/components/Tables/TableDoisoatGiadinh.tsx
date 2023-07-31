@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import apiFirebase from "../../firebase/apiFirebase";
+import { Pagination } from "antd";
 
 interface FirebaseData {
   id: string;
@@ -27,8 +28,6 @@ const DoisoatGiadinh: React.FC<TableQuanliveProps> = ({
   const [data, setData] = useState<FirebaseData[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 9;
-
-  console.log(denngay);
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -58,8 +57,8 @@ const DoisoatGiadinh: React.FC<TableQuanliveProps> = ({
   const currentRows = data
     .filter((item) => {
       const isTicketNumberMatch = item.sove && item.sove.includes(ticketNumber);
-      const isDoisoatMatch = onfillter === "Tất cả" || item.doisoat === onfillter;
-        
+      const isDoisoatMatch =
+        onfillter === "Tất cả" || item.doisoat === onfillter;
 
       if (!tungay && !denngay) {
         // Nếu chưa chọn ngày, hiển thị toàn bộ dữ liệu
@@ -103,7 +102,7 @@ const DoisoatGiadinh: React.FC<TableQuanliveProps> = ({
     })
     .slice(currentPage - 1, currentPage + rowsPerPage - 1);
 
-  const totalPages = Math.ceil(currentRows.length / rowsPerPage);
+  // const totalPages = Math.ceil(currentRows.length / rowsPerPage);
 
   return (
     <>
@@ -121,27 +120,27 @@ const DoisoatGiadinh: React.FC<TableQuanliveProps> = ({
           </thead>
           <tbody>
             {currentRows.map((item, index) => {
-              let tdstyle = {};
               let doisoatStyle = {};
               if (item.doisoat === "Đã đối soát") {
                 doisoatStyle = { color: "red" };
               } else {
                 doisoatStyle = { color: "#A5A8B1" };
               }
+              let tdClass = "";
               if (index % 2 === 1) {
-                tdstyle = { backgroundColor: "#F7F8FB", padding: "10px" };
+                tdClass = "fill";
               } else {
-                tdstyle = { padding: "10px" };
+                tdClass = "nofill";
               }
 
               return (
                 <tr key={index}>
-                  <td style={tdstyle}>{calculateSTT(index)}</td>
-                  <td style={tdstyle}>{item.sove}</td>
-                  <td style={tdstyle}>{item.ngaysudung}</td>
-                  <td style={tdstyle}>{item.tenloaive}</td>
-                  <td style={tdstyle}>{item.congcheck}</td>
-                  <td style={tdstyle}>
+                  <td className={tdClass}>{calculateSTT(index)}</td>
+                  <td className={tdClass}>{item.sove}</td>
+                  <td className={tdClass}>{item.ngaysudung}</td>
+                  <td className={tdClass}>{item.tenloaive}</td>
+                  <td className={tdClass}>{item.congcheck}</td>
+                  <td className={tdClass}>
                     <i style={doisoatStyle}>{item.doisoat}</i>{" "}
                   </td>
                 </tr>
@@ -151,19 +150,13 @@ const DoisoatGiadinh: React.FC<TableQuanliveProps> = ({
         </table>
       </div>
       <div className="pagination justify-content-center">
-        {Array.from({ length: totalPages }, (_, index) => index + 1).map(
-          (pageNumber) => (
-            <button
-              key={pageNumber}
-              className={`page-link btn btn-danger ${
-                pageNumber === currentPage ? "active" : ""
-              }`}
-              onClick={() => handlePageChange(pageNumber)}
-            >
-              {pageNumber}
-            </button>
-          )
-        )}
+        <Pagination
+          current={currentPage}
+          pageSize={rowsPerPage}
+          total={currentRows.length}
+          onChange={handlePageChange}
+          showSizeChanger={false}
+        />
       </div>
     </>
   );

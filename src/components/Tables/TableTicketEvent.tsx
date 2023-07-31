@@ -2,46 +2,57 @@ import React, { useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import apiFirebase from "../../firebase/apiFirebase";
 import ModalDoingaysudung from "../Modals/ModalDoingaysudung";
+import { Pagination } from "antd";
 
 interface FirebaseData {
   id: string;
-  STT: number;
   bookingcode: string;
   congcheck: string;
   ngaysudung: string;
-  ngayxuatve: string;
+  ngayhethan: string;
   sove: string;
   tinhtrang: string;
+  tensukien: string;
 }
 
 interface TableQuanliveProps {
   filter: string[];
   ticketNumber: string;
-  selectedPorts: string[]; // Thêm trạng thái cho các cổng đã chọn
+  selectedPorts: string[];
 }
 
-const Tablevegiadinh: React.FC<TableQuanliveProps> = ({
+const TableTicketEvent: React.FC<TableQuanliveProps> = ({
   filter,
   ticketNumber,
   selectedPorts,
 }) => {
-  const [data, setData] = useState<FirebaseData[]>([]);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const rowsPerPage = 9;
   const [modalNgaysudung, setModalNgaysudung] = useState(false);
   const [valueNgayhethan, setValuengayhethan] = useState<string | null>(null);
+  const [str, setStr] = useState<string | null>("");
   const [idhethan, setIdngayhethan] = useState<string>("");
-  const handlePageChange = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
-  };
-  const openModalDoingaysudung = (value: string, id: string) => {
+  const [sove, setSove] = useState<string>("");
+  const openModalDoingaysudung = (
+    value: string,
+    id: string,
+    sove: string,
+    str: string
+  ) => {
     setModalNgaysudung(true);
     setValuengayhethan(value || null);
     setIdngayhethan(id);
+    setSove(sove);
+    setStr(str);
   };
 
+  const [data, setData] = useState<FirebaseData[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 9;
+
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
   const fetchData = async () => {
-    const querySnapshot = await getDocs(collection(apiFirebase, "ticket"));
+    const querySnapshot = await getDocs(collection(apiFirebase, "ticketEvent"));
     const fetchedData: FirebaseData[] = [];
     querySnapshot.forEach((doc) => {
       fetchedData.push({ id: doc.id, ...doc.data() } as FirebaseData);
@@ -53,10 +64,9 @@ const Tablevegiadinh: React.FC<TableQuanliveProps> = ({
     fetchData();
   }, [modalNgaysudung]);
 
-  const closeModal = async () => {
+  const closeModal = () => {
     setModalNgaysudung(false);
     setValuengayhethan(null);
-    await fetchData(); // Kích hoạt việc lấy lại dữ liệu sau khi đóng modal
   };
 
   const indexOfLastRow = currentPage * rowsPerPage;
@@ -99,13 +109,12 @@ const Tablevegiadinh: React.FC<TableQuanliveProps> = ({
         (selectedPorts.length === 0 || selectedPorts.includes(item.congcheck))
     );
   }
+
   const currentRows = filteredRows.slice(indexOfFirstRow, indexOfLastRow);
 
   const calculateSTT = (index: number) => {
     return indexOfFirstRow + index + 1;
   };
-
-  const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
 
   return (
     <>
@@ -116,9 +125,10 @@ const Tablevegiadinh: React.FC<TableQuanliveProps> = ({
               <th>STT</th>
               <th>Booking code</th>
               <th>Số vé</th>
+              <th>Tên sự kiện</th>
               <th>Tình trạng sử dụng</th>
               <th>Ngày sử dụng</th>
-              <th>Ngày xuất vé</th>
+              <th>Hạn sử dụng</th>
               <th>Cổng check-in</th>
               <th></th>
             </tr>
@@ -145,29 +155,40 @@ const Tablevegiadinh: React.FC<TableQuanliveProps> = ({
                   color: "#03AC00",
                 };
               }
-              let tdstyle = {};
+              let tdClass = "";
               if (index % 2 === 1) {
-                tdstyle = { backgroundColor: "#F7F8FB", padding: "10px" };
+                tdClass = "fill";
               } else {
-                tdstyle = { padding: "10px" };
+                tdClass = "nofill";
               }
-
+              let str = "event";
               return (
                 <tr className="hov" key={index}>
-                  <td style={tdstyle}>{calculateSTT(index)}</td>
-                  <td style={tdstyle}>{item.bookingcode}</td>
-                  <td style={tdstyle}>{item.sove}</td>
-                  <td style={tdstyle}>
+                  <td className={tdClass}>{calculateSTT(index)}</td>
+                  <td className={tdClass}>{item.bookingcode}</td>
+                  <td className={tdClass}>{item.sove}</td>
+                  <td className={tdClass}>{item.tensukien}</td>
+                  <td className={tdClass}>
                     <span className="hansudung" style={spanStyle}>
                       <i className="bi bi-circle-fill"></i>
                       <span>{item.tinhtrang}</span>
                     </span>
                   </td>
-                  <td style={tdstyle}>{item.ngaysudung}</td>
-                  <td style={tdstyle}>{item.ngayxuatve}</td>
-                  <td style={tdstyle}>{item.congcheck} </td>
-                  <td style={tdstyle}>
-                    <i onClick={() => openModalDoingaysudung(item.ngaysudung, item.id)} className="bi bi-three-dots-vertical"></i>
+                  <td className={tdClass}>{item.ngaysudung}</td>
+                  <td className={tdClass}>{item.ngayhethan}</td>
+                  <td className={tdClass}>{item.congcheck}</td>
+                  <td className={tdClass}>
+                    <i
+                      onClick={() =>
+                        openModalDoingaysudung(
+                          item.ngayhethan,
+                          item.id,
+                          item.sove,
+                          str
+                        )
+                      }
+                      className="bi bi-three-dots-vertical"
+                    ></i>
                   </td>
                 </tr>
               );
@@ -175,29 +196,25 @@ const Tablevegiadinh: React.FC<TableQuanliveProps> = ({
           </tbody>
         </table>
       </div>
-      <div className="pagination justify-content-center">
-        {Array.from({ length: totalPages }, (_, index) => index + 1).map(
-          (pageNumber) => (
-            <button
-              key={pageNumber}
-              className={`page-link btn btn-danger ${
-                pageNumber === currentPage ? "active" : ""
-              }`}
-              onClick={() => handlePageChange(pageNumber)}
-            >
-              {pageNumber}
-            </button>
-          )
-        )}
+      <div className="pagination">
+        <Pagination
+          current={currentPage}
+          pageSize={rowsPerPage}
+          total={filteredRows.length}
+          onChange={handlePageChange}
+          showSizeChanger={false}
+        />
       </div>
-      {/* <ModalDoingaysudung
-        onclose={closeModal}
-        idngayhethan={idhethan}
-        visible={modalNgaysudung}
+      <ModalDoingaysudung
         valueNgayhethan={valueNgayhethan}
-      /> */}
+        onclose={closeModal}
+        visible={modalNgaysudung}
+        idngayhethan={idhethan}
+        inSove={sove}
+        defaulModal={str}
+      />
     </>
   );
 };
 
-export default Tablevegiadinh;
+export default TableTicketEvent;

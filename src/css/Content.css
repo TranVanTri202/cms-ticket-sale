@@ -20,6 +20,7 @@
   margin-top: 20px;
   border-radius: 24px;
   margin-right: 17px;
+  position: relative;
 }
 .layputlocve {
   background-color: #fff;
@@ -145,4 +146,15 @@
 
 .hov:hover .bi-three-dots-vertical{
   visibility: visible;
+}
+
+.pagination{
+  position: absolute;
+  bottom: 0;
+  right: 50%;
+}
+
+.ant-pagination-item-active{
+  border: 1px solid  #ff993c !important;
+  color: #ff993c !important ;
 }

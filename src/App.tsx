@@ -3,10 +3,10 @@ import Menuu from "./components/Layouts/Menu";
 import "./css/index.css";
 import Navtop from "./components/Layouts/Navtop";
 import { Route, Routes } from "react-router-dom";
-import Trangchu from "./pages/Trangchu";
-import Quanlyve from "./pages/Quanlyve";
-import Doisatve from "./pages/Doisoatve";
-import Goidichvu from "./pages/Goidichvu";
+import Home from "./pages/Home";
+import TicketManagement from "./pages/TicketManagement";
+import TicketCheck from "./pages/TicketCheck";
+import ServicePack from "./pages/ServicePack";
 
 function App() {
   return (
@@ -16,10 +16,10 @@ function App() {
         <div>
           <Navtop />
           <Routes>
-            <Route path="/" element={<Trangchu />} />
-            <Route path="/danhsachve" element={<Quanlyve />} />
-            <Route path="/doisoatve" element={<Doisatve />} />
-            <Route path="/goidichvu" element={<Goidichvu />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/TicketManagement" element={<TicketManagement />} />
+            <Route path="/TicketCheck" element={<TicketCheck />} />
+            <Route path="/ServicePack" element={<ServicePack />} />
           </Routes>
         </div>
       </div>

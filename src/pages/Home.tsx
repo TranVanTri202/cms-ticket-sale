@@ -2,7 +2,7 @@ import { CalendarDate } from "../components/Calendar/Calendar";
 import ChartDoughnut from "../components/Charts/DoughtnutChart";
 import LineChartComponent from "../components/Charts/Linechart";
 
-const Trangchu = () => {
+const Home = () => {
   return (
     <>
       <div className="content">
@@ -45,4 +45,4 @@ const Trangchu = () => {
   );
 };
 
-export default Trangchu;
+export default Home;

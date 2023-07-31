@@ -1,21 +1,25 @@
 import React, { useState } from "react";
 import Modal from "antd/lib/modal/Modal";
-import { CalendarDate } from "../Calendar/Calendar";
+
+import { CalendarDateValue } from "../Calendar/CalenderAddticket";
 
 interface ModalQuanliveProps {
   visible: boolean;
   onClose: () => void;
   onFilter: (filterValue: string[], portValue: string[]) => void;
+  filterDate: (beginDate:string | null, endDate:string | null) => void;
 }
 
 const ModalQuanlive: React.FC<ModalQuanliveProps> = ({
   visible,
   onClose,
   onFilter,
+  filterDate,
 }) => {
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([""]);
-  const [selectedPorts, setSelectedPorts] = useState<string[]>([""]);
-
+  const [selectedOptions, setSelectedOptions] = useState<string[]>(["Tất cả"]);
+  const [selectedPorts, setSelectedPorts] = useState<string[]>(["Tất cả"]);
+  const [beginDate, setBeginDate] = useState<string | null>(null)
+  const [endDate, setEndDate] = useState<string | null>("")
   const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const optionValue = event.target.value;
 
@@ -64,10 +68,10 @@ const ModalQuanlive: React.FC<ModalQuanliveProps> = ({
       });
     }
   };
-  
 
   const handleFilterSubmit = () => {
     onFilter(selectedOptions, selectedPorts);
+    filterDate(beginDate, endDate)
     onClose();
   };
 
@@ -79,12 +83,12 @@ const ModalQuanlive: React.FC<ModalQuanliveProps> = ({
           <div className="tungay-denngay">
             <div className="tungay">
               <span>Từ ngày</span> <br />
-              <CalendarDate />
+              <CalendarDateValue onDateChange={setBeginDate} />
             </div>
             <div className="denngay">
               <span>Đến ngày</span>
               <br />
-              <CalendarDate />
+              <CalendarDateValue onDateChange={setEndDate} />
             </div>
           </div>
           <span className="tinhtrangsudung">Tình trạng sử dụng</span>
@@ -147,43 +151,53 @@ const ModalQuanlive: React.FC<ModalQuanliveProps> = ({
               <label htmlFor="portall">Tất cả</label>
             </div>
             <div className="port-item">
-              <input type="checkbox"
+              <input
+                type="checkbox"
                 id="port1"
                 value="Cổng 1"
                 checked={selectedPorts.includes("Cổng 1")}
-                onChange={handlePortChange}/>
+                onChange={handlePortChange}
+              />
               <label htmlFor="port1">Cổng 1</label>
             </div>
             <div className="port-item">
-              <input type="checkbox"
+              <input
+                type="checkbox"
                 id="port2"
                 value="Cổng 2"
                 checked={selectedPorts.includes("Cổng 2")}
-                onChange={handlePortChange} />
+                onChange={handlePortChange}
+              />
               <label htmlFor="port2">Cổng 2</label>
             </div>
             <div className="port-item">
-              <input type="checkbox"
+              <input
+                type="checkbox"
                 id="port3"
                 value="Cổng 3"
                 checked={selectedPorts.includes("Cổng 3")}
-                onChange={handlePortChange} />
+                onChange={handlePortChange}
+              />
               <label htmlFor="port3">Cổng 3</label>
             </div>
             <div className="port-item">
-              <input type="checkbox"
+              <input
+                type="checkbox"
                 id="port4"
                 value="Cổng 4"
                 checked={selectedPorts.includes("Cổng 4")}
-                onChange={handlePortChange} />
+                onChange={handlePortChange}
+              />
               <label htmlFor="port4">Cổng 4</label>
             </div>
             <div className="port-item">
-              <input type="checkbox"
+              <input
+                type="checkbox"
                 id="port5"
                 value="Cổng 5"
                 checked={selectedPorts.includes("Cổng 5")}
-                onChange={handlePortChange} />
+                onChange={handlePortChange}
+              />
               <label htmlFor="port5">Cổng 5</label>
             </div>
           </div>

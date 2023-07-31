@@ -1,24 +1,30 @@
 import { ChangeEvent, useState } from "react";
 import ModalQuanlive from "../components/Modals/ModalQuanlive";
-import Tablevegiadinh from "../components/Tables/Tablevegiadinh";
-import TableveSukien from "../components/Tables/TableveSukien";
+import TableTicketFamily from "../components/Tables/TableTicketFamily";
+import TableTicketEvent from "../components/Tables/TableTicketEvent";
 
-const Quanlyve = () => {
+const TicketManagement = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedPorts, setSelectedPorts] = useState<string[]>([]);
   const [filter, setFilter] = useState<string[]>(["Tất cả"]);
-  const [selectedTab, setSelectedTab] = useState("giaDinh"); // Thêm state để theo dõi tab được chọn
+  const [selectedTab, setSelectedTab] = useState("giaDinh");
+  const [beginDate, setBeginDate] = useState<string | null>("") // Thêm state để theo dõi tab được chọn
+  const [endDate, setEndDate] = useState<string | null>("")
+   // Thêm state để theo dõi tab được chọn
   const handleFilterChange = (filterValue: string[], portValue: string[]) => {
     setFilter(filterValue);
-    setSelectedPorts(portValue) // Nhận giá trị filter và cập nhật state filter
+    setSelectedPorts(portValue); // Nhận giá trị filter và cập nhật state filter
   };
+  const handletInvalueDate = (beginDate:string | null, endDate:string| null) => {
+    setBeginDate(beginDate)
+    setEndDate(endDate)
+  }
   const [ticketNumber, setTicketNumber] = useState<string>("");
 
   const valueTicket = (e: ChangeEvent<HTMLInputElement>) => {
     setTicketNumber(e.target.value);
-
   };
-  
+
   const openModal = () => {
     setModalVisible(true);
   };
@@ -26,8 +32,6 @@ const Quanlyve = () => {
   const closeModal = () => {
     setModalVisible(false);
   };
- 
-  
 
   const handleTabChange = (tab: string) => {
     setSelectedTab(tab);
@@ -76,9 +80,19 @@ const Quanlyve = () => {
           </div>
 
           {selectedTab === "giaDinh" ? (
-            <Tablevegiadinh filter={filter} ticketNumber={ticketNumber} selectedPorts={selectedPorts}/>
+            <TableTicketFamily
+              filter={filter}
+              ticketNumber={ticketNumber}
+              selectedPorts={selectedPorts}
+              enddate={endDate}
+              BeginDate={beginDate}
+            />
           ) : (
-            <TableveSukien filter={filter} ticketNumber={ticketNumber} selectedPorts={selectedPorts} />
+            <TableTicketEvent
+              filter={filter}
+              ticketNumber={ticketNumber}
+              selectedPorts={selectedPorts}
+            />
           )}
         </div>
       </div>
@@ -86,10 +100,10 @@ const Quanlyve = () => {
         visible={modalVisible}
         onClose={closeModal}
         onFilter={handleFilterChange}
+        filterDate={handletInvalueDate}
       />
-      
     </>
   );
 };
 
-export default Quanlyve;
+export default TicketManagement;

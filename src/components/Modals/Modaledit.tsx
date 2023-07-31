@@ -85,15 +85,22 @@ const Modaledit: React.FC<ModalGoidichvuProps> = ({
     ? newngayhethan
     : dayjs(oldNgayhethan, "DD/MM/YYYY");
 
-    const [newThoigianapdung, setNewthoigianapdung] = useState<dayjs.Dayjs | null>(
-      oldThoigiandung ? dayjs(oldThoigiandung,"HH:mm:ss") : null
-    )
-    const timeapdung = newThoigianapdung ? newThoigianapdung : dayjs(oldThoigiandung, "HH:mm:ss");
+  const [newThoigianapdung, setNewthoigianapdung] =
+    useState<dayjs.Dayjs | null>(
+      oldThoigiandung ? dayjs(thoigianapdung, "HH:mm:ss") : null
+    );
+  const timeapdung = newThoigianapdung
+    ? newThoigianapdung
+    : dayjs(oldThoigiandung, "HH:mm:ss");
 
-    const [newThoigianhethan, setNewthoigianhethan] = useState<dayjs.Dayjs | null>(
-      oldThoigianhethan ? dayjs(oldThoigianhethan) : null
-    )
-    const timehethan = newThoigianhethan  ? newThoigianhethan :  dayjs(oldThoigianhethan, "HH:mm:ss");
+  const [newThoigianhethan, setNewthoigianhethan] =
+    useState<dayjs.Dayjs | null>(
+      oldThoigianhethan ? dayjs(thoigianhethan, "HH:mm:ss") : null
+    );
+  const timehethan = newThoigianhethan
+    ? newThoigianhethan
+    : dayjs(oldThoigianhethan, "HH:mm:ss");
+    
   useEffect(() => {
     setNewmagoi(magoi);
     setNewTengoi(tengoi);
@@ -104,7 +111,7 @@ const Modaledit: React.FC<ModalGoidichvuProps> = ({
     setoldNgayapdung(ngayapdung);
     setoldNgayhethan(ngayhethan);
     setoldthoigianapdung(thoigianapdung);
-    setoldthoigianhethan(thoigianhethan)
+    setoldthoigianhethan(thoigianhethan);
   }, [
     magoi,
     tengoi,
@@ -128,10 +135,20 @@ const Modaledit: React.FC<ModalGoidichvuProps> = ({
         giavecombo: newGiavecombo,
         sogoi: newSogoi,
         tinhtrang: newTinhtrang,
-        ngayapdung: newngayapdung?.format("DD/MM/YYYY"),
-        ngayhethan: newngayhethan?.format("DD/MM/YYYY"),
-        // thoigianapdung: newThoigianapdung?.format("HH:mm:ss"),
-        // thoigianhethan: newThoigianhethan?.format("HH:mm:ss"),
+        ngayapdung:
+          newngayapdung === null
+            ? oldNgayapdung
+            : newngayapdung?.format("DD/MM/YYYY"),
+        ngayhethan:
+          newngayhethan === null
+            ? oldNgayhethan
+            : newngayhethan?.format("DD/MM/YYYY"),
+        thoigianapdung: !newThoigianapdung
+          ? oldThoigiandung
+          : newThoigianapdung?.format("HH:mm:ss"),
+        thoigianhethan: !newThoigianhethan
+          ? oldThoigianhethan
+          : newThoigianhethan?.format("HH:mm:ss"),
       });
       onClose();
     } catch (error) {
@@ -186,7 +203,10 @@ const Modaledit: React.FC<ModalGoidichvuProps> = ({
                   onDateChange={setNewngayapdung}
                   dateValue={datengayapdung}
                 />
-                <CalendarTimeValue onTimechange={setNewthoigianapdung} timeValue={timeapdung} />
+                <CalendarTimeValue
+                  onTimechange={setNewthoigianapdung}
+                  timeValue={timeapdung}
+                />
               </div>
             </div>
             <div className="ngayhethan">
@@ -196,14 +216,17 @@ const Modaledit: React.FC<ModalGoidichvuProps> = ({
                   onDateChange={setNewngayhethan}
                   dateValue={datengayhethan}
                 />
-                <CalendarTimeValue onTimechange={setNewthoigianhethan} timeValue={timehethan} />
+                <CalendarTimeValue
+                  onTimechange={setNewthoigianhethan}
+                  timeValue={timehethan}
+                />
               </div>
             </div>
           </div>
           <p>Giá vé áp dụng </p>
           <div className="giaveapdung">
             <div className="formgiave">
-              <input checked type="checkbox" />
+              <input defaultChecked type="checkbox" />
               <span>Vé lẻ (vnđ/vé) với giá </span>
               <input
                 type="number"
@@ -214,7 +237,7 @@ const Modaledit: React.FC<ModalGoidichvuProps> = ({
               <span>/ vé</span>
             </div>
             <div className="formgiave">
-              <input checked type="checkbox" />
+              <input defaultChecked type="checkbox" />
               <span>Combo vé với giá </span>
               <input
                 type="number"

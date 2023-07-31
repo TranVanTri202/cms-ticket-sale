@@ -24,12 +24,11 @@ const ModalGoidichvu: React.FC<ModalGoidichvuProps> = ({
   const [thoigianhethan, setThoigianHethan] = useState<string | null>(null);
   const [giavele, setGiaVeLe] = useState<number | null>(null);
   const [giavecombo, setGiaComboVe1] = useState<number | null>(null);
-  const [sogoi, setSogoi] = useState("");
+  const [sogoi, setSogoi] = useState<number | null>(null);
   const [tinhtrang, setTinhTrang] = useState("Đang áp dụng");
   const [disableinput1, setDisableinput1] = useState<boolean>(false);
   const [disableinput2, setDisableinput2] = useState<boolean>(false);
 
-  
   const handleCheckboxChange = () => {
     setDisableinput1(!disableinput1); // Đảo ngược giá trị của disableinput
   };
@@ -38,16 +37,16 @@ const ModalGoidichvu: React.FC<ModalGoidichvuProps> = ({
   };
   const handleSave = async () => {
     try {
-      const formattedNgayApDung = ngayapdung
-        ? dayjs(ngayapdung).format("MM/DD/YYYY")
-        : "";
-      const formattedNgayHetHan = ngayhethan
-        ? dayjs(ngayhethan).format("MM/DD/YYYY")
-        : "";
+      // const formattedNgayApDung = ngayapdung
+      //   ? dayjs(ngayapdung).format("MM/DD/YYYY")
+      //   : "";
+      // const formattedNgayHetHan = ngayhethan
+      //   ? dayjs(ngayhethan).format("MM/DD/YYYY")
+      //   : "";
       await addDoc(collection(apiFirebase, "eventpackage"), {
         tengoi: tenGoiVe,
-        ngayapdung: formattedNgayApDung,
-        ngayhethan: formattedNgayHetHan,
+        ngayapdung: ngayapdung,
+        ngayhethan: ngayhethan,
         thoigianapdung,
         thoigianhethan,
         giavele,
@@ -55,7 +54,14 @@ const ModalGoidichvu: React.FC<ModalGoidichvuProps> = ({
         sogoi,
         tinhtrang,
       });
-
+      // setTenGoiVe("")
+      // setGiaComboVe1(null)
+      // setGiaVeLe(null)
+      // setSogoi(null)
+      // setThoigianApdung(null)
+      // setThoigianHethan(null)
+      // setNgayApDung(null)
+      // setNgayHetHan(null)
       onClose();
     } catch (error) {
       console.error("Lỗi khi lưu thông tin vào Firebase:", error);
@@ -128,8 +134,8 @@ const ModalGoidichvu: React.FC<ModalGoidichvuProps> = ({
             <span> / </span>
             <input
               type="number"
-              value={sogoi}
-              onChange={(e) => setSogoi(e.target.value)}
+              value={sogoi !== null ? sogoi.toString() : ""}
+              onChange={(e) => setSogoi(Number(e.target.value))}
               placeholder="Giá vé"
               style={{ width: "70px" }}
               disabled={!disableinput2}

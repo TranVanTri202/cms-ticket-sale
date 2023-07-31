@@ -7,12 +7,12 @@ const dateFormatList = ["DD/MM/YYYY"];
 dayjs.extend(customParseFormat);
 
 interface CalenderTimeProps {
-  onTimechane: (date: string) => void;
+  onTimechane: (date: string | null) => void;
 }
 
 export const CalendarTime: React.FC<CalenderTimeProps> = ({ onTimechane }) => {
   const handleTimeChange = (time: any) => {
-    onTimechane(time.format("HH:mm:ss"));
+    onTimechane( time !== null ? time.format("HH:mm:ss") : null);
   };
   return (
     <Space style={{ margin: "0" }}>
@@ -27,7 +27,7 @@ export const CalendarTime: React.FC<CalenderTimeProps> = ({ onTimechane }) => {
 };
 
 interface CalendarDateProps {
-  onDateChange: (date: string) => void; // Thêm prop onDateChange và định nghĩa kiểu của nó
+  onDateChange: (date: string | null) => void; // Thêm prop onDateChange và định nghĩa kiểu của nó
 }
 export const CalendarDateValue: React.FC<CalendarDateProps> = ({
   onDateChange,
@@ -36,7 +36,7 @@ export const CalendarDateValue: React.FC<CalendarDateProps> = ({
 
   const handleDateChange = (date: any) => {
     setSelectedDate(date);
-    onDateChange(date ? date.format("DD/MM/YYYY") : null);
+    onDateChange(date !== null ? date.format("DD/MM/YYYY") : null);
   };
 
   return (

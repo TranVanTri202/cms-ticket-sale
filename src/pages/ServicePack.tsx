@@ -2,7 +2,7 @@ import { useState } from "react";
 import ModalGoidichvu from "../components/Modals/ModalThemGoidichvu";
 import TableGoive from "../components/Tables/TableGoive";
 
-const Goidichvu = () => {
+const ServicePack = () => {
   const [modalvisible, setModalVisible] = useState<boolean>(false);
  
 
@@ -48,4 +48,4 @@ const Goidichvu = () => {
   );
 };
 
-export default Goidichvu;
+export default ServicePack;

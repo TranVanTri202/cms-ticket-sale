@@ -27,14 +27,14 @@ const TableGoive: React.FC<tableProps> = ({ modalVi }) => {
   const [inTengoi, setTengoi] = useState<string>("");
   const [inThoigianApdung, setThoigianapdung] = useState<string>("");
   const [inThoigianhethan, setThoigianhethan] = useState<string>("");
-  const [inngayapdung, setNgayapdung] = useState<string | null>("")
+  const [inngayapdung, setNgayapdung] = useState<string | null>("");
   const [inngayhethan, setNgayhethan] = useState<string | null>("");
   const [inGiavecombo, setGiavecombo] = useState<number>(0);
   const [inGiavele, setGiavele] = useState<number | null>(0);
   const [inSogoi, setSogoi] = useState<number | null>(0);
   const [inTinhtrang, setTinhtrang] = useState<string>("");
   const [inIDmagoi, setIdmagoi] = useState<string>("");
-  
+
   const formatNumberWithDots = (value: number | null) => {
     return value ? value.toLocaleString("vi-VN") : "";
   };
@@ -55,12 +55,12 @@ const TableGoive: React.FC<tableProps> = ({ modalVi }) => {
     giavecombo: number,
     giavele: number,
     sogoi: number,
-    tinhtrang: string, 
-    ngayapdung:string,
-    ngayhethan:string,
-    thoigianapdung:string, 
-    thoigianhethan:string,
-    id:string,
+    tinhtrang: string,
+    ngayapdung: string,
+    ngayhethan: string,
+    thoigianapdung: string,
+    thoigianhethan: string,
+    id: string
   ) => {
     setModalEditVisible(true);
     setMagoi(magoi);
@@ -69,12 +69,11 @@ const TableGoive: React.FC<tableProps> = ({ modalVi }) => {
     setGiavele(giavele);
     setSogoi(sogoi);
     setTinhtrang(tinhtrang);
-    setNgayapdung(ngayapdung)
-    setNgayhethan(ngayhethan)
+    setNgayapdung(ngayapdung);
+    setNgayhethan(ngayhethan);
     setThoigianapdung(thoigianapdung);
-    setThoigianhethan(thoigianhethan)
+    setThoigianhethan(thoigianhethan);
     setIdmagoi(id);
-    
   };
   const [data, setData] = useState<packageData[]>([]);
 
@@ -125,8 +124,12 @@ const TableGoive: React.FC<tableProps> = ({ modalVi }) => {
           {data
             .slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
             .map((item, index) => {
-              let magoi1 = item.ngayapdung.split("/");
-              let maGoi2 = "ALT" + magoi1.join("");
+              let magoi1 =
+                item.ngayapdung === null ? null : item.ngayapdung.split("/");
+              let maGoi2 =
+                magoi1 === null
+                  ? "Chưa có ngày áp dụng"
+                  : "ALT" + magoi1.join("");
               let spanStyle = "";
               if (item.tinhtrang === "Tắt") {
                 spanStyle = "tat";
@@ -173,11 +176,11 @@ const TableGoive: React.FC<tableProps> = ({ modalVi }) => {
                           item.giavele,
                           item.sogoi,
                           item.tinhtrang,
-                          item.ngayapdung, 
-                          item.ngayhethan, 
+                          item.ngayapdung,
+                          item.ngayhethan,
                           item.thoigianapdung,
                           item.thoigianhethan,
-                          item.id,
+                          item.id
                         )
                       }
                       className="bi bi-pencil-square me-2"
@@ -192,12 +195,14 @@ const TableGoive: React.FC<tableProps> = ({ modalVi }) => {
       </table>
 
       {/* Hiển thị Pagination */}
-      <Pagination
-        current={currentPage}
-        pageSize={rowsPerPage}
-        total={data.length}
-        onChange={handlePageChange}
-      />
+      <div className="pagination">
+        <Pagination
+          current={currentPage}
+          pageSize={rowsPerPage}
+          total={data.length}
+          onChange={handlePageChange}
+        />
+      </div>
       <Modaledit
         visibleedit={modalEditVisible}
         onClose={closeModaledit}

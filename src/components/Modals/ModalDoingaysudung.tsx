@@ -1,10 +1,11 @@
 import { Modal } from "antd";
-import { CalendarDatevl } from "../Calendar/Calendar";
+
 
 import dayjs from "dayjs";
-import {  useState } from "react";
+import { useState } from "react";
 import apiFirebase from "../../firebase/apiFirebase";
-import { doc, updateDoc , collection} from "firebase/firestore";
+import { doc, updateDoc, collection } from "firebase/firestore";
+import { CalendarDateValue } from "../Calendar/CalenderUpdate";
 
 interface ModalProps {
   visible: boolean;
@@ -12,6 +13,7 @@ interface ModalProps {
   valueNgayhethan: string | null;
   idngayhethan: string;
   inSove: string;
+  defaulModal: string | null;
 }
 
 const ModalDoingaysudung: React.FC<ModalProps> = ({
@@ -20,23 +22,33 @@ const ModalDoingaysudung: React.FC<ModalProps> = ({
   valueNgayhethan,
   idngayhethan,
   inSove,
+  defaulModal,
 }) => {
-
-  const [ngayhethann, setNgayHetHan] = useState<dayjs.Dayjs | null>
-  (
+  const [ngayhethann, setNgayHetHan] = useState<dayjs.Dayjs | null>(
     valueNgayhethan ? dayjs(valueNgayhethan, "DD/MM/YYYY") : null
   );
   // Gán ngayhethan cho dateObject nếu ngayhethan khác null
-  const dateObject = ngayhethann ? ngayhethann : dayjs(valueNgayhethan, "DD/MM/YYYY");
-   
+  const dateObject = ngayhethann
+    ? ngayhethann
+    : dayjs(valueNgayhethan, "DD/MM/YYYY");
+
   const handlesave = async () => {
     try {
       // Cập nhật ngày hết hạn mới vào Firebase
       if (ngayhethann) {
-        const docRef = doc(collection(apiFirebase, "ticketEvent"), idngayhethan);
-        await updateDoc(docRef, { ngayhethan: ngayhethann.format("DD/MM/YYYY") });
+        const docRef = doc(
+          collection(
+            apiFirebase,
+            defaulModal === "event" ? "ticketEvent" : "ticket"
+          ),
+          idngayhethan
+        );
+        await updateDoc(docRef, {
+          [defaulModal === "event" ? "ngayhethan" : "ngaysudung"]:
+            ngayhethann.format("DD/MM/YYYY"),
+        });
       }
-  
+
       setNgayHetHan(null);
       onclose(); // Đóng modal sau khi lưu thành công
     } catch (error) {
@@ -60,27 +72,40 @@ const ModalDoingaysudung: React.FC<ModalProps> = ({
           </div>
           <div className="row mt-3">
             <div className="col-md-4">
-              <span>Vé cổng - Gói sự kiện</span>
+              <span>Loại vé</span>
             </div>
             <div className="col-md-8">
-              <span>Vé cổng - Gói sự kiện</span>
+              <span>
+                {defaulModal === "event"
+                  ? "Vé cổng - Gói sự kiện"
+                  : "Vé cổng - Gói gia đình"}{" "}
+              </span>
             </div>
           </div>
-          <div className="row mt-3">
-            <div className="col-md-4">
-              <span>Tên sự kiện</span>
+          {defaulModal === "event" ? (
+            <div className="row mt-3">
+              <div className="col-md-4">
+                <span>Tên sự kiện</span>
+              </div>
+              <div className="col-md-8">
+                <span>Hội triển lãm tiêu dùng 2021</span>
+              </div>
             </div>
-            <div className="col-md-8">
-              <span>Hội triển lãm tiêu dùng 2021</span>
-            </div>
-          </div>
-          <div className="row mt-3">
-            <div className="col-md-4">
-              <span>Hạn sử dụng</span>
-            </div>
-            <div className="col-md-8">
-            <CalendarDatevl dateValue={dateObject} onDateChange={setNgayHetHan} />
+          ) : (
+            ""
+          )}
 
+          <div className="row mt-3">
+            <div className="col-md-4">
+              <span>
+                {defaulModal === "event" ? "Hạn sử dụng" : "Ngày sử dụng"}{" "}
+              </span>
+            </div>
+            <div className="col-md-8">
+              <CalendarDateValue
+                dateValue={dateObject}
+                onDateChange={setNgayHetHan}
+              />
             </div>
           </div>
           <div className="btnfooter mt-4">
