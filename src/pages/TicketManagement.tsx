@@ -86,6 +86,7 @@ const TicketManagement = () => {
               selectedPorts={selectedPorts}
               enddate={endDate}
               BeginDate={beginDate}
+          
             />
           ) : (
             <TableTicketEvent

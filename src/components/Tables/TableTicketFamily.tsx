@@ -4,6 +4,7 @@ import apiFirebase from "../../firebase/apiFirebase";
 import ModalDoingaysudung from "../Modals/ModalDoingaysudung";
 import { Pagination } from "antd";
 
+
 interface FirebaseData {
   id: string;
   STT: number;
@@ -13,6 +14,7 @@ interface FirebaseData {
   ngayxuatve: string;
   sove: string;
   tinhtrang: string;
+  giave: number;
 }
 
 interface TableTicketProps {
@@ -20,7 +22,8 @@ interface TableTicketProps {
   ticketNumber: string;
   selectedPorts: string[];
   enddate:string | null;
-  BeginDate:string | null
+  BeginDate:string | null,
+
 }
 
 const TableTicketFamily: React.FC<TableTicketProps> = ({
@@ -29,6 +32,7 @@ const TableTicketFamily: React.FC<TableTicketProps> = ({
   selectedPorts,
   BeginDate,
   enddate,
+
 }) => {
   const [data, setData] = useState<FirebaseData[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -39,6 +43,8 @@ const TableTicketFamily: React.FC<TableTicketProps> = ({
   const [soVe, setsove] = useState<string>("");
   const [str, setStr] = useState<string | null>("");
 
+  
+  
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
@@ -118,7 +124,7 @@ const TableTicketFamily: React.FC<TableTicketProps> = ({
     return indexOfFirstRow + index + 1;
   };
 
-  // const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
+  
 
   return (
     <React.Fragment>
@@ -165,6 +171,10 @@ const TableTicketFamily: React.FC<TableTicketProps> = ({
                 tdClass = "nofill";
               }
               let str = "family";
+              if(item.tinhtrang ==="Đã sử dụng"){
+                  
+              }
+              
               return (
                 <tr className="hov" key={index}>
                   <td className={tdClass}>{calculateSTT(index)}</td>

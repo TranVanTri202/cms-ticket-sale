@@ -24,17 +24,29 @@ interface ChartData {
   datasets: DataSets[];
 }
 
-const dataList: DataMonth[] = [
-  { day: "Thứ 2", amount: "130.0" },
-  { day: "Thứ 3", amount: "186.0" },
-  { day: "Thứ 4", amount: "330.0" },
-  { day: "Thứ 5", amount: "248.0" },
-  { day: "Thứ 6", amount: "210.0" },
-  { day: "Thứ 7", amount: "260.0" },
-  { day: "CN",    amount: "290.0" },
-];
+interface valueWeek {
+  week1: string;
+  week2: string;
+  week3: string;
+  week4: string;
+  week5: string;
+}
 
-function LineChartComponent() {
+const LineChartComponent: React.FC<valueWeek> = ({
+  week1,
+  week2,
+  week3,
+  week4,
+  week5,
+}) => {
+  const dataList: DataMonth[] = [
+    { day: "01 - 07", amount: week1.toString() },
+    { day: "08 - 14", amount: week2.toString() },
+    { day: "15 - 21", amount: week3.toString() },
+    { day: "22 - 28", amount: week4.toString() },
+    { day: "29 - 31", amount: week5.toString() },
+  ];
+
   const [chartData, setChartData] = useState<ChartData>({
     labels: [],
     datasets: [
@@ -67,8 +79,8 @@ function LineChartComponent() {
         },
       ],
     });
-  }, []);
-
+  }, [week1, week2, week3, week4, week5]);
+  
   const createLinearGradient = () => {
     const ctx = document.createElement("canvas").getContext("2d");
     if (ctx) {
