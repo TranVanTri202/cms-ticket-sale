@@ -1,5 +1,3 @@
-## (Máy em không dùng được Yarn bị lỗi cài đặt rồi ạ,cho em xin dùng npm ạ )
-
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
