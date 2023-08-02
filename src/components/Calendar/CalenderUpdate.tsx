@@ -18,8 +18,9 @@ export const CalendarDateValue: React.FC<CalendarValue> = ({
   }, [dateValue]);
 
   const handleDateChange = (date: any) => {
-    setSelectedDate(date);
-    onDateChange(date);
+    const dayFormat = date ? dayjs(date) : null;
+    setSelectedDate(dayFormat);
+    onDateChange(dayFormat);
   };
 
   return (
@@ -48,8 +49,9 @@ export const CalendarTimeValue: React.FC<TimeValue> = ({
     setSelectedTime(timeValue);
   }, [timeValue]);
   const handleChaneTime = (time: any) => {
-    setSelectedTime(time);
-    onTimechange(time);
+    const timeFormat = time ? time: null;
+    setSelectedTime(timeFormat);
+    onTimechange(timeFormat);
   };
   return (
     <Space style={{ margin: "0" }}>

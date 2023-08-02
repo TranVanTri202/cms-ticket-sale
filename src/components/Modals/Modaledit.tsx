@@ -45,10 +45,14 @@ const Modaledit: React.FC<ModalGoidichvuProps> = ({
   const [newGiavele, setNewgiavele] = useState<number | null>();
   const [newSogoi, setNewSogoi] = useState<number | null>();
   const [newTinhtrang, setNewTinhtrang] = useState<string>("");
-  const [oldNgayhethan, setoldNgayhethan] = useState<string | null>("");
-  const [oldNgayapdung, setoldNgayapdung] = useState<string | null>("");
-  const [oldThoigiandung, setoldthoigianapdung] = useState<string | null>("");
-  const [oldThoigianhethan, setoldthoigianhethan] = useState<string | null>("");
+  const [ngayApDung, setNgayApDung] = useState<dayjs.Dayjs | null>(null);
+  const [ngayHethan, setNgayHethan] = useState<dayjs.Dayjs | null>(null);
+  const [thoiGianApDung, setThoiGianApDung] = useState<dayjs.Dayjs | null>(
+    null
+  );
+  const [thoiGianHetHan, setThoiGianHetHan] = useState<dayjs.Dayjs | null>(
+    null
+  );
   const handleChangMagoi = (e: ChangeEvent<HTMLInputElement>) => {
     setNewmagoi(e.target.value);
   };
@@ -70,37 +74,18 @@ const Modaledit: React.FC<ModalGoidichvuProps> = ({
   const handleChangeTinhtrang = (e: ChangeEvent<HTMLSelectElement>) => {
     setNewTinhtrang(e.target.value);
   };
-
-  const [newngayapdung, setNewngayapdung] = useState<dayjs.Dayjs | null>(
-    oldNgayapdung ? dayjs(ngayapdung, "DD/MM/YYYY") : null
-  );
-  const datengayapdung = newngayapdung
-    ? newngayapdung
-    : dayjs(oldNgayapdung, "DD/MM/YYYY");
-
-  const [newngayhethan, setNewngayhethan] = useState<dayjs.Dayjs | null>(
-    oldNgayhethan ? dayjs(ngayhethan, "DD/MM/YYYY") : null
-  );
-  const datengayhethan = newngayhethan
-    ? newngayhethan
-    : dayjs(oldNgayhethan, "DD/MM/YYYY");
-
-  const [newThoigianapdung, setNewthoigianapdung] =
-    useState<dayjs.Dayjs | null>(
-      oldThoigiandung ? dayjs(thoigianapdung, "HH:mm:ss") : null
-    );
-  const timeapdung = newThoigianapdung
-    ? newThoigianapdung
-    : dayjs(oldThoigiandung, "HH:mm:ss");
-
-  const [newThoigianhethan, setNewthoigianhethan] =
-    useState<dayjs.Dayjs | null>(
-      oldThoigianhethan ? dayjs(thoigianhethan, "HH:mm:ss") : null
-    );
-  const timehethan = newThoigianhethan
-    ? newThoigianhethan
-    : dayjs(oldThoigianhethan, "HH:mm:ss");
-    
+  const handleChangeNgayapdung = (date: any) => {
+    setNgayApDung(date);
+  };
+  const handleChangeNgayhethan = (date: any) => {
+    setNgayHethan(date);
+  };
+  const handleChangeThoigianapdung = (time: any) => {
+    setThoiGianApDung(time);
+  };
+  const handleChangeThoigianhethan = (time: any) => {
+    setThoiGianHetHan(time);
+  };
   useEffect(() => {
     setNewmagoi(magoi);
     setNewTengoi(tengoi);
@@ -108,10 +93,10 @@ const Modaledit: React.FC<ModalGoidichvuProps> = ({
     setNewgiavele(giavele);
     setNewSogoi(sogoi);
     setNewTinhtrang(tinhtrang);
-    setoldNgayapdung(ngayapdung);
-    setoldNgayhethan(ngayhethan);
-    setoldthoigianapdung(thoigianapdung);
-    setoldthoigianhethan(thoigianhethan);
+    setNgayApDung(dayjs(ngayapdung, "DD/MM/YYYY"));
+    setNgayHethan(dayjs(ngayhethan, "DD/MM/YYYY"));
+    setThoiGianApDung(dayjs(thoigianapdung, "HH:mm:ss"));
+    setThoiGianHetHan(dayjs(thoigianhethan, "HH:mm:ss"));
   }, [
     magoi,
     tengoi,
@@ -135,20 +120,10 @@ const Modaledit: React.FC<ModalGoidichvuProps> = ({
         giavecombo: newGiavecombo,
         sogoi: newSogoi,
         tinhtrang: newTinhtrang,
-        ngayapdung:
-          newngayapdung === null
-            ? oldNgayapdung
-            : newngayapdung?.format("DD/MM/YYYY"),
-        ngayhethan:
-          newngayhethan === null
-            ? oldNgayhethan
-            : newngayhethan?.format("DD/MM/YYYY"),
-        thoigianapdung: !newThoigianapdung
-          ? oldThoigiandung
-          : newThoigianapdung?.format("HH:mm:ss"),
-        thoigianhethan: !newThoigianhethan
-          ? oldThoigianhethan
-          : newThoigianhethan?.format("HH:mm:ss"),
+        ngayapdung: ngayApDung?.format("DD/MM/YYYY"),
+        ngayhethan: ngayHethan?.format("DD/MM/YYYY"),
+        thoigianapdung: thoiGianApDung?.format("HH:mm:ss"),
+        thoigianhethan: thoiGianHetHan?.format("HH:mm:ss"),
       });
       onClose();
     } catch (error) {
@@ -200,12 +175,12 @@ const Modaledit: React.FC<ModalGoidichvuProps> = ({
               <span>Ngày áp dụng</span>
               <div className="input-dateandtime" style={{ display: "flex" }}>
                 <CalendarDateValue
-                  onDateChange={setNewngayapdung}
-                  dateValue={datengayapdung}
+                  onDateChange={handleChangeNgayapdung}
+                  dateValue={ngayApDung}
                 />
                 <CalendarTimeValue
-                  onTimechange={setNewthoigianapdung}
-                  timeValue={timeapdung}
+                  onTimechange={handleChangeThoigianapdung}
+                  timeValue={thoiGianApDung}
                 />
               </div>
             </div>
@@ -213,12 +188,12 @@ const Modaledit: React.FC<ModalGoidichvuProps> = ({
               <span>Ngày hết hạn</span>
               <div className="input-dateandtime" style={{ display: "flex" }}>
                 <CalendarDateValue
-                  onDateChange={setNewngayhethan}
-                  dateValue={datengayhethan}
+                  onDateChange={handleChangeNgayhethan}
+                  dateValue={ngayHethan}
                 />
                 <CalendarTimeValue
-                  onTimechange={setNewthoigianhethan}
-                  timeValue={timehethan}
+                  onTimechange={handleChangeThoigianhethan}
+                  timeValue={thoiGianHetHan}
                 />
               </div>
             </div>
