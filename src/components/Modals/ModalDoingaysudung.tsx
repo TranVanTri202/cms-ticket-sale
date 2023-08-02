@@ -1,8 +1,7 @@
 import { Modal } from "antd";
 
-
 import dayjs from "dayjs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import apiFirebase from "../../firebase/apiFirebase";
 import { doc, updateDoc, collection } from "firebase/firestore";
 import { CalendarDateValue } from "../Calendar/CalenderUpdate";
@@ -24,13 +23,14 @@ const ModalDoingaysudung: React.FC<ModalProps> = ({
   inSove,
   defaulModal,
 }) => {
-  const [ngayhethann, setNgayHetHan] = useState<dayjs.Dayjs | null>(
-    valueNgayhethan ? dayjs(valueNgayhethan, "DD/MM/YYYY") : null
-  );
+  const [ngayhethann, setNgayHetHan] = useState<dayjs.Dayjs | null>(null);
   // Gán ngayhethan cho dateObject nếu ngayhethan khác null
-  const dateObject = ngayhethann
-    ? ngayhethann
-    : dayjs(valueNgayhethan, "DD/MM/YYYY");
+  const handleChangeNgayhethan = (date: any) => {
+    setNgayHetHan(date);
+  };
+  useEffect(() => {
+    setNgayHetHan(dayjs(valueNgayhethan, "DD/MM/YYYY"));
+  }, [valueNgayhethan]);
 
   const handlesave = async () => {
     try {
@@ -103,8 +103,8 @@ const ModalDoingaysudung: React.FC<ModalProps> = ({
             </div>
             <div className="col-md-8">
               <CalendarDateValue
-                dateValue={dateObject}
-                onDateChange={setNgayHetHan}
+                dateValue={ngayhethann}
+                onDateChange={handleChangeNgayhethan}
               />
             </div>
           </div>
