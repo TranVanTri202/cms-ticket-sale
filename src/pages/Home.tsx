@@ -173,8 +173,9 @@ const Home = () => {
               </div>
             </div>
             <div className="mota">
-              <button></button> <span>Vé đã sử dụng</span> <br />
               <button></button> <span>Vé chưa sử dụng</span>
+              <br />
+              <button></button> <span>Vé đã sử dụng</span>
             </div>
           </div>
         </div>

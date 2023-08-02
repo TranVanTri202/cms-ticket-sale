@@ -33,8 +33,10 @@ const ChartDoughnut: React.FC<valueTicket> = ({ vedasudung, vechuasudung }) => {
   const [chartDemo, setChart] = useState<TypeChart>(chartData);
 
   useEffect(() => {
-    const data = [vedasudung, vechuasudung].filter((value) => value !== null) as number[];
-    const backgroundColors = ["rgb(255, 138, 72)", "rgb(54, 162, 235)"];
+    const data = [vedasudung, vechuasudung].filter(
+      (value) => value !== null
+    ) as number[];
+    const backgroundColors = ["rgb(54, 162, 235)", "rgb(255, 138, 72)"];
 
     setChart({
       datasets: [
